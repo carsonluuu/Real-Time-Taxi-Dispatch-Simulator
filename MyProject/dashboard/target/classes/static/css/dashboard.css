@@ -1,0 +1,261 @@
+#miniMap {
+    height: 250px;
+    width: 440px;
+}
+
+#sidebar {
+    width: 460px;
+}
+
+.leaflet-sidebar > .leaflet-control {
+    padding: 10px 10px;
+}
+
+.vehicleDetails {
+    font-size: 11px;
+}
+
+.header-icon {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+}
+
+.info {
+    padding: 6px 8px;
+    background: white;
+    /* font: 10px/12px Arial, Helvetica, sans-serif;
+     */
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+fieldset.scheduler-border {
+    border: 1px groove #ddd !important;
+    /*     padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+     */
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+legend.scheduler-border {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 10px;
+    border-bottom: none;
+    margin-bottom: 5px;
+}
+
+.loc_header {
+    font-weight: bold;
+}
+
+.loc_comments {
+    font-size: xx-small;
+}
+
+.well {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    margin: 1em;
+}
+
+th {
+    text-align: right;
+    padding: 2px;
+    padding-right: 5px;
+    padding-left: 15px;
+}
+
+td {
+    padding-left: 5px;
+}
+
+.navbar-form {
+    padding-top: 3px;
+}
+
+.navbar-right {
+    padding-top: 3px;
+    padding-right: 3px;
+}
+
+h4 {
+    margin-top: 3px;
+    margin-bottom: 0px;
+    margin-right: 3px;
+    padding-right: 3px;
+}
+
+.container {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+}
+
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+    -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}
+
+.marker-cluster-small {
+    background-color: rgba(181, 226, 140, 0.6);
+}
+
+.marker-cluster-small div {
+    background-color: rgba(110, 204, 57, 0.6);
+}
+
+.marker-cluster-medium {
+    background-color: rgba(241, 211, 87, 0.6);
+}
+
+.marker-cluster-medium div {
+    background-color: rgba(240, 194, 12, 0.6);
+}
+
+.marker-cluster-large {
+    background-color: rgba(253, 156, 115, 0.6);
+}
+
+.marker-cluster-large div {
+    background-color: rgba(241, 128, 23, 0.6);
+}
+
+/* IE 6-8 fallback colors */
+.leaflet-oldie .marker-cluster-small {
+    background-color: rgb(181, 226, 140);
+}
+
+.leaflet-oldie .marker-cluster-small div {
+    background-color: rgb(110, 204, 57);
+}
+
+.leaflet-oldie .marker-cluster-medium {
+    background-color: rgb(241, 211, 87);
+}
+
+.leaflet-oldie .marker-cluster-medium div {
+    background-color: rgb(240, 194, 12);
+}
+
+.leaflet-oldie .marker-cluster-large {
+    background-color: rgb(253, 156, 115);
+}
+
+.leaflet-oldie .marker-cluster-large div {
+    background-color: rgb(241, 128, 23);
+}
+
+.marker-cluster {
+    background-clip: padding-box;
+    border-radius: 20px;
+}
+
+.marker-cluster div {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+
+    text-align: center;
+    border-radius: 15px;
+    font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.marker-cluster span {
+    line-height: 30px;
+}
+
+.visual_search {
+    padding-left: 170px;
+    padding-top: 10px;
+    width: 600px;
+}
+
+.VS-search .search_input input {
+    margin-top: 3px;
+}
+
+.VS-search .search_facet input {
+    margin-top: 2px;
+}
+
+/* Start of GroupedLayer LeafLet plugin */
+label {
+    font-weight: normal;
+}
+
+.leaflet-control-layers-group-name {
+    font-weight: bold;
+    margin-bottom: .2em;
+    display: block;
+}
+
+.leaflet-control-layers-group {
+    margin-bottom: .5em;
+}
+
+.leaflet-control-layers-group label {
+    padding-left: .5em;
+}
+
+/* End of GroupedLayer LeafLet plugin */
+
+.navbar {
+    /*background-color: #6db33f;*/
+    background-color: #0c46f5;
+    color: #ffffff;
+    position: absolute;
+    height: 50px;
+    top: 0;
+    width: 100%;
+    margin: 0px;
+}
+
+.navbar-inverse {
+    background-color: #ffffff;
+    /*border-color: #6db33f;*/
+    border-color: #0c46f5;
+}
+
+.container {
+    position: absolute;
+    top: 50px;
+    bottom: 35px;
+    padding-top: 0px;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    /*background-color: #6db33f;*/
+    background-color: #818181;
+}
+
+footer {
+    text-align: center;
+    font-size: 10px;
+    padding-top: 10px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 35px;
+}

@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: dashboard
+stomp:
+  url: localhost:9007/stomp
+
+zuul:
+  routes:
+    fleet-location-service:
+      path: /fleet-location-service/**
+      url: http://localhost:9000
+    service-location-service:
+      path: /service-location-service/**
+      url: http://localhost:9001

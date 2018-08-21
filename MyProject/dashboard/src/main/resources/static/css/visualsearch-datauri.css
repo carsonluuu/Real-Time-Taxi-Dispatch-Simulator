@@ -1,0 +1,289 @@
+
+.VS-search .VS-icon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 16px;
+    vertical-align: middle;
+    width: 16px;
+}
+.VS-search .VS-icon-cancel {
+    background-image: url("data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAWCAYAAAAW5GZjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAb9JREFUeNqUUr1qAkEQ3j0khQp6kihaeGgEEa18gTQR0iRY+BaBSMDGwidIEUKqFL6BopgqBAJ5AMFGjUU0d4WHEvwJarvZ77gRIzGYgb1hZr+Z75vZ40IIzqTNZrPj8Xicn0wmmcViEXS73aaqqq+BQODG6/W+A8MBNk3zfDAY3C6Xy0O2ZS6X6zMSiVwHg8FHLjtq7Xb7RQKj7BeTzVCgJ5PJU2U0GhUk7REuMpkMi8fjFggeMeecrVYrFRId0CgTAgDDMFg4HLbA8IjJgHNgGEr0er0fQIphUmZAwdSUADUB4RFDsz3oSMF6CLzZkQqgGebz+Z75dDqNdTqdp13bgDmdTj2VSp0oWHg0Gr2UNH2Z/9o+yMv7K4/HY/C/XhDUfr//jl7QQVT9fp/V63VWqVRYt9tliUSCZbPZg1wux9Lp9PqFeK1Wu9A0DdXz7YM87i0FrVZLs4Fi1wmFQh/NZjOmVKvVgq7rR/QflMtlixGedjwcDlUpMQ9tbzalkAAB2/R297mNW+sT2wUbUnA//V/nYrH4QOBNABUQuFQq3TNMuc82sDVrz41G42yvPeODAwZQ0QzwiJEnzLcAAwBJ6WXlwoBgZAAAAABJRU5ErkJggg==");
+    background-position: center 0;
+    cursor: pointer;
+    height: 11px;
+    width: 11px;
+}
+.VS-search .VS-icon-cancel:hover {
+    background-position: center -11px;
+}
+.VS-search .VS-icon-search {
+    background-image: url("data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAUZJREFUeNpUUM2qgmAQzS8NiUgLzTIXLZQW1QuI9AY9QPSW9gQ9QiriwpJQEBVrVWT2d7p2L9xZzDdzZs7M+YYqy/J8Ptu2vd/v4zgeDAaqqk4mE47jar9GnU6nzWbjOA5FUa/Xq0Jns9l8Pud5vkpp58cwAOzhcBhFkeu6GNztdg3D+Db5vo9nOp2iiWGYTqdDCMFe4LquI0aVpGmKR9M0lmUbjQY8YiBJklTb4YkoilBzOBzq9TogeMQIJEmqmlAlo9EIyXa7tSyrKAp4xEBkWUb5q2k8Hh+PR8/zwjCEgufz+aESstvtoKnVan2GgY31kBkEAfT1ej1FUZDiNIIgrFYr9H1ug3teLpfH43G/3/FBUJGu1+s8z8FZLpc0mmiabrfbf5fEumazuVgsTNO8Xq+3242qRNT+G0CMz7IMzH6//xZgAA60tj6rqzxpAAAAAElFTkSuQmCC");
+    height: 12px;
+    width: 12px;
+}
+.VS-search div, .VS-search span, .VS-search a, .VS-search img, .VS-search ul, .VS-search li, .VS-search form, .VS-search label, .VS-interface ul, .VS-interface li, .VS-interface {
+    border: 0 none;
+    font-family: inherit;
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+}
+.VS-search *:focus {
+    outline: 0 none;
+}
+.VS-search {
+    color: black;
+    line-height: 1;
+}
+.VS-search ol, .VS-search ul {
+    list-style: outside none none;
+}
+.VS-search {
+    color: #373737;
+    font-family: Arial,sans-serif;
+    font-size: 12px;
+}
+.VS-search input {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    box-shadow: none;
+    display: block;
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0;
+    outline: medium none;
+    padding: 4px;
+    width: 100%;
+}
+.VS-interface, .VS-search .dialog, .VS-search input {
+    font-family: "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif !important;
+    line-height: 1.1em;
+}
+.VS-search .VS-search-box {
+    background: none repeat scroll 0 0 #fafafa;
+    border: 2px solid #ccc;
+    border-radius: 16px;
+    box-shadow: 0 0 3px #ccc inset;
+    cursor: text;
+    height: auto;
+    min-height: 28px;
+    position: relative;
+}
+.VS-search.VS-readonly .VS-search-box {
+    cursor: default;
+}
+.VS-search .VS-search-box.VS-focus {
+    border-color: #acf;
+    box-shadow: 0 0 3px #acf inset;
+}
+.VS-search .VS-placeholder {
+    color: #808080;
+    font-size: 14px;
+    left: 4px;
+    margin: 0 20px 0 22px;
+    position: absolute;
+    top: 7px;
+}
+.VS-search .VS-search-box.VS-focus .VS-placeholder, .VS-search .VS-search-box .VS-placeholder.VS-hidden {
+    display: none;
+}
+.VS-search .VS-search-inner {
+    margin: 0 20px 0 22px;
+    overflow: hidden;
+    position: relative;
+}
+.VS-search input {
+    width: 100px;
+}
+.VS-search input, .VS-search .VS-input-width-tester {
+    color: #808080;
+    float: left;
+    font: 13px/17px Helvetica,Arial;
+    padding: 6px 0;
+}
+.VS-search.VS-focus input {
+    color: #606060;
+}
+.VS-search .VS-icon-search {
+    left: 9px;
+    position: absolute;
+    top: 8px;
+}
+.VS-search .VS-icon-cancel {
+    position: absolute;
+    right: 9px;
+    top: 8px;
+}
+.VS-search.VS-readonly .VS-icon-cancel {
+    display: none;
+}
+.VS-search .search_facet {
+    border: 1px solid transparent;
+    float: left;
+    height: 20px;
+    margin: 3px -3px 3px 0;
+    padding: 0 0 0 14px;
+    position: relative;
+}
+.VS-search.VS-readonly .search_facet {
+    padding-left: 0;
+}
+.VS-search .search_facet.is_selected {
+    background-color: #d2e6fd;
+    background-image: -moz-linear-gradient(center top , #d2e6fd, #b0d1f9);
+    border: 1px solid #6eadf5;
+    border-radius: 16px;
+    margin-left: -3px;
+}
+.VS-search .search_facet .category {
+    color: #808080;
+    cursor: pointer;
+    float: left;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 13px;
+    padding: 4px 0 0;
+    text-transform: uppercase;
+}
+.VS-search.VS-readonly .search_facet .category {
+    cursor: default;
+}
+.VS-search .search_facet.is_selected .category {
+    margin-left: 3px;
+}
+.VS-search .search_facet .search_facet_input_container {
+    float: left;
+}
+.VS-search .search_facet input {
+    color: #000;
+    font-size: 13px;
+    height: 16px;
+    line-height: 16px;
+    margin: 0;
+    padding: 1px 3px 2px 4px;
+    position: relative;
+    width: auto;
+    z-index: 100;
+}
+.VS-search .search_facet.is_editing input, .VS-search .search_facet.is_selected input {
+    color: #000;
+}
+.VS-search.VS-readonly .search_facet .search_facet_remove {
+    display: none;
+}
+.VS-search .search_facet .search_facet_remove {
+    left: 0;
+    position: absolute;
+    top: 4px;
+}
+.VS-search .search_facet.is_selected .search_facet_remove {
+    background-position: center -11px;
+    left: 3px;
+    opacity: 0.4;
+}
+.VS-search .search_facet .search_facet_remove:hover {
+    opacity: 1;
+}
+.VS-search .search_facet.is_editing .category, .VS-search .search_facet.is_selected .category {
+    color: #000;
+}
+.VS-search .search_facet.search_facet_maybe_delete .category, .VS-search .search_facet.search_facet_maybe_delete input {
+    color: darkred;
+}
+.VS-search .search_input {
+    float: left;
+    height: 28px;
+    margin-left: -1px;
+}
+.VS-search .search_input input {
+    height: 22px;
+    line-height: 10px;
+    margin-top: -4px;
+    min-width: 4px;
+    padding: 6px 3px 6px 2px;
+    position: relative;
+    width: 10px;
+    z-index: 100;
+}
+.VS-search .search_input.is_editing input {
+    color: #202020;
+}
+.ui-helper-hidden-accessible {
+    display: none;
+}
+.VS-interface.ui-autocomplete {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #f6f6f6;
+    border-color: #d9d9d9 #c0c0c0 #c0c0c0;
+    border-image: none;
+    border-right: 1px solid #c0c0c0;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 3px 4px 5px -2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    font-size: 13px;
+    margin: 0;
+    max-height: 240px;
+    max-width: 220px;
+    min-width: 80px;
+    opacity: 0.97;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+    position: absolute;
+    top: 5px;
+    width: auto;
+    z-index: 10000;
+}
+.VS-interface.ui-autocomplete .ui-autocomplete-category {
+    background-color: #b7b7b7;
+    border-bottom: 1px solid #a2a2a2;
+    border-top: 1px solid #a2a2a2;
+    color: white;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px;
+    text-shadow: 0 -1px 0 #999;
+    text-transform: capitalize;
+}
+.VS-interface.ui-autocomplete .ui-menu-item {
+    float: none;
+}
+.VS-interface.ui-autocomplete .ui-menu-item a {
+    background-color: #f8f8f8;
+    background-image: -moz-linear-gradient(center top , #f8f8f8, #f3f3f3);
+    border-bottom: 1px solid #f0f0f0;
+    border-top: 1px solid #fafafa;
+    color: #000;
+    display: block;
+    line-height: 1;
+    outline: medium none;
+    padding: 3px 4px 5px;
+}
+.VS-interface.ui-autocomplete .ui-menu-item a:active {
+    outline: medium none;
+}
+.VS-interface.ui-autocomplete .ui-menu-item .ui-state-hover, .VS-interface.ui-autocomplete .ui-menu-item .ui-state-focus {
+    background-color: #6483f7;
+    background-image: -moz-linear-gradient(center top , #648bf5, #2465f3);
+    border-color: #5b83ec -moz-use-text-color #1459e9;
+    border-style: solid none;
+    border-width: 1px medium;
+    color: white;
+    margin: 0;
+}
+.VS-interface.ui-autocomplete .ui-corner-all {
+    border-radius: 0;
+}
+.VS-interface.ui-autocomplete li {
+    list-style: outside none none;
+    width: auto;
+}

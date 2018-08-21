@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spring Taxi Fleeting Dashboard</title>
+  <link rel="stylesheet" href="/css/bootstrap-3.2.0.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/visualsearch-datauri.css" type="text/css"/>
+  <link rel="stylesheet" href="/webjars/leaflet/0.7.5/leaflet.css" type="text/css"/>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"></link>
+  <link rel="stylesheet" href="/css/font-awesome-animation.css" type="text/css"></link>
+  <link rel="stylesheet" href="/css/leaflet.control.sidebar.css" type="text/css"></link>
+  <link rel="stylesheet" href="/css/dashboard.css" type="text/css"></link>
+
+  <script src="/webjars/leaflet/0.7.5/leaflet.js"></script>
+  <script src="/js/leaflet.groupedlayercontrol.js" type="text/javascript"></script>
+  <script src="/js/vs-dependencies.js" type="text/javascript"></script>
+  <script src="/js/visualsearch.js" type="text/javascript"></script>
+  <script src="js/leaflet.markercluster.js" type="text/javascript"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <style>
+    .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+      vertical-align: middle;
+      padding: 0px;
+      padding-top: 2px;
+      margin-left: 5px;
+    }
+
+  </style>
+  <script>
+    $(function () {
+      $("#fromDate").datepicker({
+        altField: "#actualFromDate",
+        altFormat: "@"
+      });
+      $("#toDate").datepicker({
+        altField: "#actualToDate",
+        altFormat: "@"
+      });
+
+    });
+  </script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top" role="navigation" id="navbar">
+  <div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        <img class="img-rounded header-icon" height="46" width="60"
+             src="/images/rentme_logo_ent_horiz_RGB.JPG"/>
+      </a>
+      <div class="visual_search"></div>
+    </div>
+    <div class="navbar-collapse collapse">
+      <div class="navbar-form navbar-left">
+        <a class="btn btn-default btn-sm my_popup_open">
+          <span class="fa fa-filter"></span>
+          Filters</a>
+        <span id="spinnerIcon" class="fa fa-spinner fa-spin"></span>
+      </div>
+      <div class="navbar-right">
+        <h4>Spring Taxi Fleet Monitoring</h4>
+      </div>
+
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>
+
+<div class="container">
+  <div id="map" class="sidebar-map"></div>
+
+  <!-- Add content to the popup -->
+  <div id="my_popup" class="well">
+
+    <form id="filterForm">
+      <div>
+        <div>
+          <span class="leaflet-control-layers-group-name">Service Filter</span>
+          <label>
+            <input name="serviceFilter" value="StopTruck" type="checkbox"/>
+            <span> StopNow</span>
+          </label>
+          <label>
+            <input name="serviceFilter" value="ServiceNow" type="checkbox"/>
+            <span> ServiceNow</span>
+          </label>
+          <label>
+            <input name="serviceFilter" value="ServiceSoon" type="checkbox"/>
+            <span> ServiceSoon</span>
+          </label>
+          <label>
+            <input name="serviceFilter" value="ServiceInfo" type="checkbox"/>
+            <span> ServiceInfo</span>
+          </label>
+          <label>
+            <input name="serviceFilter" value="None" type="checkbox"/>
+            <span> None</span>
+          </label>
+        </div>
+        <div>
+          <span class="leaflet-control-layers-group-name">Vehicle Movement</span>
+          <label>
+            <input name="vehicleMovementFilter" value="IN_MOTION" type="checkbox"/>
+            <span> In Motion</span>
+          </label>
+          <label>
+            <input name="vehicleMovementFilter" value="STOPPED" type="checkbox"/>
+            <span> Stopped</span>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <!-- Add an optional button to close the popup -->
+    <button class="btn btn-info btn-sm  my_popup_close" onclick="updateSearch()">Update Search</button>
+
+  </div>
+
+  <div id="sidebar">
+    <table class="vehicleDetails">
+      <tr>
+        <th align="right">VIN:</th>
+        <td colspan="2" id="telemetryVin"></td>
+      </tr>
+      <tr>
+        <th align="right">Address:</th>
+        <td id="telemetryAddress"></td>
+      </tr>
+      <tr>
+        <th align="right">Timestamp:</th>
+        <td id="telemetryTimestamp"></td>
+      </tr>
+    </table>
+    <div id="miniMap"></div>
+    <fieldset class="scheduler-border">
+      <legend class="scheduler-border"><i class="fa fa-tachometer"></i> Telemetry Info</legend>
+      <table class="vehicleDetails">
+        <tr>
+          <th align="right">Longitude:</th>
+          <td id="telemetryLongitude"></td>
+          <th align="right">TSP Provider:</th>
+          <td id="telemetryTspProvider"></td>
+        </tr>
+        <tr>
+          <th align="right">Latitude:</th>
+          <td id="telemetryLatitude"></td>
+          <th align="right">Odometer:</th>
+          <td id="telemetryOdometer"></td>
+        </tr>
+        <tr>
+          <th align="right">GpsSpeed:</th>
+          <td id="telemetryGpsSpeed"></td>
+          <th align="right">Total Engine Time:</th>
+          <td id="telemetryTotalEngineTime"></td>
+        </tr>
+        <tr>
+          <th align="right">GpsStatus:</th>
+          <td id="telemetryGpsStatus"></td>
+          <th align="right">Total Idle Time:</th>
+          <td id="telemetryTotalIdleTime"></td>
+        </tr>
+        <tr>
+          <th align="right">Heading:</th>
+          <td id="telemetryHeading"></td>
+          <th align="right">Total Fuel Usage:</th>
+          <td id="telemetryTotalFuelUsage"></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset class="scheduler-border" id="rentmeUnitInfo" style="display: none;">
+      <legend class="scheduler-border"><i class="fa fa-bus"></i> Spring Taxi Unit Details</legend>
+      <table class="vehicleDetails">
+        <tr>
+          <th align="right">Customer Name:</th>
+          <td colspan="3" id="customerName"></td>
+        </tr>
+        <tr>
+          <th align="right">Unit #:</th>
+          <td id="unitNumber"></td>
+          <th align="right">Engine Make:</th>
+          <td id="engineMake"></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset class="scheduler-border" id="rentmeFaultInfo" style="display: none;">
+      <legend class="scheduler-border"><i class="fa fa-exclamation-triangle"></i> Unit Fault</legend>
+      <table class="vehicleDetails">
+        <tr>
+          <th align="right">SPN:</th>
+          <td id="faultSpn"></td>
+          <th align="right">FMI:</th>
+          <td id="faultFmi"></td>
+        </tr>
+        <tr class="rentmeFaultCode">
+          <th align="right">Fault Code:</th>
+          <td id="rentmeFCfaultCode"></td>
+          <th align="right">Fault Code ID:</th>
+          <td id="rentmeFCfaultCodeId"></td>
+        </tr>
+        <tr class="rentmeFaultCode">
+          <th align="right">Description:</th>
+          <td colspan="3" id="rentmeFCdescription"></td>
+        </tr>
+        <tr class="rentmeFaultCode">
+          <th align="right">Instructions:</th>
+          <td colspan="3" id="rentmeFCinstructions"></td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
+
+
+</div>
+<footer>
+  <p>Spring Taxi Dispatch System Demo</p>
+</footer>
+
+<!-- Include jQuery Popup Overlay -->
+<script src="/webjars/jquery-popup-overlay/1.7.4/jquery.popupoverlay.js"></script>
+<script src="/js/bootstrap-3.2.0.js"></script>
+<script src="/js/leaflet.easybutton.js"></script>
+<script src="/js/leaflet.control.sidebar.js"></script>
+<script src="/js/sockjs.js"></script>
+<script src="/js/stomp.js"></script>
+<script src="/js/pages.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>
