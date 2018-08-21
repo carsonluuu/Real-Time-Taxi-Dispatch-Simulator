@@ -1,10 +1,10 @@
 # Spring Taxi Dispatch Simulator
 
----
-
 _This was the Intern project finished in Summer 2018 regarding a web service for the real time taxi dispatch simulator. Many thanks to my supervisor and other senior engineers who gave me help with all efforts they got. Time goes fast all the time; wish them all good luck!_
 
-_\*For confidential issues, the data used and presented are fake data generated randomly, but it does not effect the generosity of the project _
+\(_For confidential issues, the data used and presented are fake data generated randomly, but it does not effect the generosity of the project\)_
+
+---
 
 ## 1 Introduction
 
@@ -36,7 +36,7 @@ The steps in the logic behind:
    1. Modify the Driver table with the trip info, marked by the info driver denying the trip
    2. Re-pair with step repeated 
 
-## 2 Algorithm Model - Dispatch
+## ![](/assets/frames.png)2 Algorithm Model - Dispatch
 
 ### 2.1 Classical Dispatching
 
@@ -77,11 +77,41 @@ A drawback of the methods mentioned above is the long dispatch time and low succ
 
 So we propose a novel combinatorial optimization model to solve the order dispatch problem. In this model, we dispatch one order to several drivers with the goal of maximizing the total success rate of these orders. When multiple drivers receive the same order, the first one to accept gets the order. If an order is not accepted, it enters the next round of dispatching until it is accepted or canceled.
 
-We first introduce some notations. .e goal of our order dispatch system is to maximize the success rate, denoted as ESR. If there are N orders to be dispatched to M drivers, we represent the dispatch result as a matrix.
+**Notations**
+
+We first introduce some notations. The goal of our order dispatch system is to maximize the success rate, denoted as ESR. If there are N orders to be dispatched to M drivers, we represent the dispatch result as a matrix.
 
 An order is dispatched to a number of drivers, and each driver decides whether or not to accept it according to his or her own preference. For each order, whether it is accepted by one of the drivers is directly related to each driver’s probability of acceptance.  Thus, the key problem for order dispatching is to estimate the probability of each driver’s acceptance of an order. If we can estimate the matrix with its elements indicating the probability of each driver accepting each order, then we can estimate the probability of an order to be accepted by one of the drivers therefore, we divide the order dispatch model into two sub-models. One model predicts each driver’s action, in which we estimate the probability of a driver accepting an order. Another model formulates an optimization problem for maximizing the target ESR using the estimated acceptance probabilities, and then solves the underlying optimization problem.
 
-TBD......
+**Accept Rate**
+
+In short, we apply Machine Learning methods, linear logistic regression \(LR\) and gradient boosted decision tree \(GBDT\) to predict the accept rate from the the features. Actually, LR will be better.
+
+![](/assets/eq4.png)
+
+The prediction model considers various factors, which can be summarized as follows:
+
+* Order-Driver related features: the pick-up distance, the broadcasting counts of the order to the driver, whether the order is in front of or behind the driver’s current driving direction.
+
+* Order related features: the distance and the estimated time arrival \(ETA\) between the origin and the destination, the destination category \(airport, hospital, school, business district, etc.\), tra.c situation in the route, historical order frequency at the destination.
+
+* Driver related features: Long-term behaviors \(include historical acceptance rate of a driver, active locations of a driver, preference of di.erent broadcast distances of a driver, etc.\) and short-term interests of a driver such as orders recently accepted or not, etc.
+
+* Supplemental features, such as day of the week, hour of the day, number of drivers and orders nearby.
+
+**Optimization Model**
+
+In our system, one order can be dispatched to several drivers, thus all these drivers contribute to the probability of order acceptance.
+
+Directly, I give the formulas for our optimization model.
+
+![](/assets/eq5.png)
+
+Many combinatorial optimization problems are NP hard, and there is no e.cient general algorithm to solve this class of problems in polynomial time. A typical approach is to use a heuristic algorithm to .nd an approximate solution. Commonly used methods include hill-climbing methods, genetic algorithms, simulated annealing algorithms, etc. By balancing the accuracy and the performance, we choose a hill-climbing method to solve the problem.
+
+**Codes**
+
+The dispatching related codes are packed in these two files:
 
 * Service-Location-Service
 * Service-Dispatch-Model
@@ -100,6 +130,37 @@ To fulfill the function, we utilized Spring Boot, Spring Cloud, Spring Data, Net
 * Fleeting-Location-Updater
 * Dashboard
 * Platform
+
+Each of the backend services is corresponding to each business function
+
+**Design principle**
+
+* Breakdown system requirements into Microservices
+* Each Microservice is single responsibility
+* Each Microservice can evolve in its own pace
+* Microservices can only be communicated through REST API or message queue
+* Cloud infrastructure services should be least intrusive to each business service
+
+**Each Microservice is single responsibility**
+
+* Do one thing and one thing only
+* Less complex business logic leads to scalability
+* Highly cohesive internally. Only expose necessary APIs to other backend services
+* Loosely coupled with other services
+
+**Microservices can only be communicated through REST API or message queue**
+
+* No functional / method calls
+* Standard protocol
+* Message is more stable than method calls
+* Decouple different services
+* Async communication
+
+**Cloud infrastructure services should be least intrusive to each business service**
+
+* Maintainability
+* Clean code
+* Developers focus on implementing business logic
 
 ### 3.1 Fleeting-Location-Initialization
 
@@ -183,7 +244,7 @@ extends PagingAndSortingRepository<ServiceLocation, Long> {
 
 Or
 
-```
+```java
 @RequestMapping(value="/bulk/serviceLocations", method=RequestMethod.POST)
 @ResponseStatus(HttpStatus.CREATED)
 public void upload(@RequestBody List<ServiceLocation> locations) {
@@ -214,7 +275,7 @@ spring:
 
 Another simple data for demo is in `serviceLocation.json`
 
-```
+```js
 {
     "latitude": 38.907774,
     "longitude": -77.023736,
@@ -236,12 +297,12 @@ curl -H "Content-Type: application/json" localhost:9001/bulk/serviceLocations -d
 
 **Google Map API**
 
-Simulator replies heavily on the Google Map API. 
+Simulator replies heavily on the Google Map API.
 
 Firstly, we denote the dependencies brought from the Google Map API
 
 ```
- <dependency>
+<dependency>
     <groupId>de.micromata.jak</groupId>
     <artifactId>JavaAPIforKml</artifactId>
     <version>2.2.1</version>
@@ -285,29 +346,31 @@ More on: [https://developers.google.com/maps/documentation/directions/intro\#Leg
 
 In short, Google Map API will help us generated the routes and the routes will be abstracted into a String. Then, we can do the simulation, based on it. A example is below:
 
-    "gpsSimulatorRequests": [
-        {
-          "vin": "7c08973d-bed4-4cbd-9c28-9282a02a6032",
-          "speedInKph": 50,
-          "move": true,
-          "exportPositionsToKml": true,
-          "exportPositionsToMessaging": true,
-          "reportInterval": 1000,
-          "secondsToError": 0,
-          "vehicleStatus": "SERVICE_SOON",
-          "polyline": "}_ulFvq|tM@wLtOCnG@RHhArAzDvEZZTN|DjAz@Tv@Xp@f@j@j@b@j@vAhBhB~Bh@x@Zp@b@jAdCfIjDlLrClJVt@z@hBjBhEv@~A^l@|@hAtAlA|CdCdBtA|AnAVZTh@Jd@d@nGRhDNvBbD?hG?nJ?zC@`GApI?XLdC@zEBb@?Nh@`BxGx@`Dx@pDzB~IhBhHjCrK`CxJ|AnGdC|JfAhEhCtKn@`CtAzF~@jD@ZGd@Q`@Ij@Ch@Dj@L^XZZLZFJ@VCRGHGJKPIPQV?tAn@NDrFlCfCnA\\VNLBL@`@JRFFH@PDLLLVLPPLRBNAPETKp@c@XMBCLEh@AdAANIhBCvB@dBFl@?lA?JGzBA~EAvC?xB~InBAlA?",
-          "faultCode": {
-            "engineMake": "DET",
-            "faultCode": "FMW",
-            "faultCodeId": "DET",
-            "faultCodeClassification": "ServiceInfo",
-            "description": "Firmware Upgrade Required",
-            "repairInstructions": "Verify Software update has been completed if available for this engine.",
-            "fmi": "14",
-            "sa": null,
-            "spn": "171"
-          }
-        }
+```js
+"gpsSimulatorRequests": [
+    {
+      "vin": "7c08973d-bed4-4cbd-9c28-9282a02a6032",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 0,
+      "vehicleStatus": "SERVICE_SOON",
+      "polyline": "}_ulFvq|tM@wLtOCnG@RHhArAzDvEZZTN|DjAz@Tv@Xp@f@j@j@b@j@vAhBhB~Bh@x@Zp@b@jAdCfIjDlLrClJVt@z@hBjBhEv@~A^l@|@hAtAlA|CdCdBtA|AnAVZTh@Jd@d@nGRhDNvBbD?hG?nJ?zC@`GApI?XLdC@zEBb@?Nh@`BxGx@`Dx@pDzB~IhBhHjCrK`CxJ|AnGdC|JfAhEhCtKn@`CtAzF~@jD@ZGd@Q`@Ij@Ch@Dj@L^XZZLZFJ@VCRGHGJKPIPQV?tAn@NDrFlCfCnA\\VNLBL@`@JRFFH@PDLLLVLPPLRBNAPETKp@c@XMBCLEh@AdAANIhBCvB@dBFl@?lA?JGzBA~EAvC?xB~InBAlA?",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "FMW",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceInfo",
+        "description": "Firmware Upgrade Required",
+        "repairInstructions": "Verify Software update has been completed if available for this engine.",
+        "fmi": "14",
+        "sa": null,
+        "spn": "171"
+      }
+    }
+```
 
 **Structures**
 
@@ -326,7 +389,7 @@ Due to the fact we use the Google Map API, we should follow the rules made by th
 Basically, we have the 4 external APIs for routings
 
 * Start Simulation - it will start the simulation and sending messages
-* Cancel Simulation - the opposite of start simulation 
+* Cancel Simulation - the opposite of start simulation
 * Open UI - go to UI dashboard
 * Status - return json object of the status
 
@@ -365,11 +428,17 @@ it will interact with fleeting-location-ingest and fleeting-location-updater, we
 
 ### 3.3 Fleeting-Location-Ingest
 
+**Overview**
+
+Publish current locations to locations queue in RabbitMQ
+
+![](/assets/mq.png)
+
 **Rabbit MQ**
 
 From now on, the famous message broker will come to be handy to help us go through the message deliver.
 
-_Ingest service_ acts between the simulator and updater. We need to specify the source and sink when it comes to interaction between them. The binding name is: **`vehicle`**
+_Ingest service_ acts between the simulator and updater. We need to specify the source and sink when it comes to interaction between them. The binding name is: `vehicle`
 
 Spring Cloud provides templet to fast bind the publisher and consumer
 
@@ -388,6 +457,8 @@ The dashboard can show some summaries for the messages
 http://localhost:15672/ 
 User/password:(guest/guest)
 ```
+
+![](/assets/RabbitMQ.png)
 
 **API**
 
@@ -418,19 +489,564 @@ spring:
 
 ### 3.4 Fleeting-Location-Updater
 
-**Webjar**
+**Overview**
 
+Consume current locations from locations queue in RabbitMQ and Setup Websocket connect and push locations to client
 
+![](/assets/update.png)
+
+**WebJars**
+
+Now we will move backend generally to frontend. [WebJars](https://www.webjars.org/) can be useful for the frontend framework package management.  
+WebJars packages these common Web front-end resources into Java Jar packages, and then manages them with Maven tools to ensure that these web resource versions are unique and upgrades are easier.
+
+**WebSocket and Stomp.js**
+
+The key thing that matters is the Rest Api, which sends to `/queue/vehicles`.
+
+```java
+@MessageMapping("/sendMessage")
+@SendTo("/queue/vehicles")
+public String sendMessage(String message) throws Exception {
+    return message;
+}
+```
+
+For WebSocket configuration, we need to register the message broker and register stomp end point.
+
+**Message Sink**
+
+Spring Cloud Stream is responsible for sending current position data to connected WebSocket client. We can denote the endpoint and sink with the annotation
+
+```java
+@MessageEndpoint
+@EnableBinding(Sink.class)
+```
+
+To link with the former service of ingesting
+
+```java
+@ServiceActivator(inputChannel = Sink.INPUT)
+public void updateLocationaddServiceLocations(String input) throws Exception {
+
+    CurrentPosition payload = this.objectMapper.readValue(input, CurrentPosition.class);
+
+    this.template.convertAndSend("/topic/vehicles", payload);
+}
+```
+
+**Updater**
+
+Spring Cloud will provide rest template for us
+
+```
+private RestTemplate restTemplate = new RestTemplate();
+```
+
+The _updateServiceLocations_ will be used like this:
+
+```java
+ ResponseEntity<Resource<ServiceLocation>> result = this.restTemplate.exchange(
+                        "http://service-location-service/serviceLocations/search/findFirstByLocationNear?location={lat},{long}",
+                        HttpMethod.GET, new HttpEntity<Void>((Void) null),
+                        new ParameterizedTypeReference<Resource<ServiceLocation>>() {
+                        }, currentPosition.getLocation().getLatitude(),
+                        currentPosition.getLocation().getLongitude());
+```
+
+Current position will be enriched with the closest service location
+
+**Application Settings**
+
+The system will run on `localhost: 9007`
+
+```
+ server:
+  port: 9007
+spring:
+  application:
+    name: fleet-location-updater
+  cloud:
+    stream:
+      bindings:
+        input: vehicles
+---
+spring:
+  profiles: test
+```
 
 ### 3.5 Dashboard
 
+We use **Leaflet.js** framework as our map UI, the dashboard will show the moving our the cars and the details of each car as well
+
+The figure below shows the overall distribution of the drivers ![](/assets/UI1.png)
+
+We can target one driver to view the detail infomation![](/assets/UI2.png)
+
+There are also some basic search features for filtering
+
+![](/assets/UI3.png)
+
 ### 3.6 Platform
 
-### 3.7 Other
+**Docker**
 
-## 4 Scalability Related Discussion
+Dockerized the system by this docker compose file. The docker will pull the image and start RabbitMQ or MongoDB
+
+```
+rabbitmq:
+  image: rabbitmq:3-management
+  ports:
+    - "5672:5672"
+    - "15672:15672"
+mongodb:
+  image: mongo
+  ports:
+    - "27017:27017"
+```
+
+**Eureka**
+
+![](/assets/eureka.png)
+
+Eureka is used for service register and discovery, we need to run itself as a micro-service
+
+```
+@EnableEurekaServer
+```
+
+To let Eureka find your service, we simply need to add anotation in the main entry of your service
+
+```
+@EnableDiscoveryClient
+```
+
+we can see from `localhost:8761`, which will show the registered services ![](/assets/register.png)
+
+**Hystrix**
+
+Hystrix is for circuit breaker, it has its own dashboard to view. Likewise, we need to run itself as a micro-service
+
+```
+@EnableHystrixDashboard
+```
+
+To add it, we simply need to add anotation in the main entry of your service
+
+```
+@EnableCircuitBreaker
+```
+
+An example usage in _updater_ service
+
+```java
+public void handleServiceLocationServiceFailure(CurrentPosition currentPosition) {
+    LOGGER.error("Hystrix Fallback Method. Unable to retrieve service station info.");
+}
+```
+
+The dashboard will run on `localhost:7979`
+
+`Hystrix Stream: http://localhost:9005/hystrix.stream`![](/assets/hystrix.png)
+
+**Zuul**
+
+Zuul is a gateway layer. It is also a micro-service. Like other services, Service-1, Service-2, ... Service-N, it is registered on the eureka server. It can discover each other. Zuul can sense which services are online. At the same time, by configuring routing rules \(examples are given later\), the request can be automatically forwarded to the specified back-end micro-service for some common pre-processing \(such as: rights authentication, token validity check, gray-scale verification part\) Traffic guidance and the like can be handled in a so-called filter \(ZuulFilter\), so that the back-end service adds services later, and the zuul layer hardly needs to be modified.
+
+**Spring Boot Acuator**
+
+Spring Boot Actuator Endpoints
+
+* /health
+* /metrics
+* /env
+* /mappings
+* /info
+
+We can have a look at the health information for the service runs on `localhost:9005` by `localhost:9005/health`
+
+```js
+{
+    "description": "Spring Cloud Eureka Discovery Client",
+    "status": "UP",
+    "discoveryComposite": {
+        "description": "Spring Cloud Eureka Discovery Client",
+        "status": "UP",
+        "discoveryClient": {
+            "description": "Spring Cloud Eureka Discovery Client",
+            "status": "UP",
+            "services": [
+                "fleet-location-simulator",
+                "fleet-location-ingest"
+            ]
+        }
+    },
+    "diskSpace": {
+        "status": "UP",
+        "total": 121018208256,
+        "free": 23863771136,
+        "threshold": 10485760
+    },
+    "hystrix": {
+    "status": "UP"
+    }
+}
+```
+
+Write your custom health check:
+
+![](/assets/health.png)
+
+**More...**
+
+Continuous Delivery \(CD\)
+
+![](/assets/CI.png)
+
+Hahaha...
+
+![](/assets/haha.png)
+
+## 4 Discussion
+
+#### 4.1 **Scalability**
+
+The default requirement is 150k QPS. The database writing/reading speed &gt; 100k QPS, but if our Database is down.
+
+So we may need **DB sharding**
+
+* Split load
+* Avoid single point failure
+
+**City Sharding**
+
+* Define a City
+* Judge which City -- Whether a user is in a polygon
+* City boundary -- nearby 2-3 cities/combination
+
+**POI Judgement**
+
+* Geo Fence
+* Two Level - City/Airport Fence
+
+**DB down**
+
+* Replica by DB —— Master-Slave
+* Replica by yourself
+
+  * sharding key -&gt; 123\(city-id\) to 123-0, 123-1, 123-2
+
+  * read from any replica, if not this one, then switch
+
+* Riak / Cassandra -- help with recovery
+
+#### 4.2 To Be Done
+
+For the two big system: dispatch and fleeting simulation, we actually uploading pre-defined locations and status from JSON file, deserialize to JSON object, and store into database then getting locations based on ID, type, or all locations. Then, frontend can use running location service to initialize all locations during startup.
+
+To meet the design requirement, we need to make the system connected and fulfill the design principles stated before.
+
+On the other hand, front end page is lacking in features. We should add more functions in it with better framework to achieve routing and more advanced productive features.
+
+For deployment AWS can be natively support, some setting-ups need to be done for the transfer.
+
+```
+eureka:
+  client:
+    #Region where eureka is deployed -For AWS specify one of the AWS regions, for other datacenters specify a arbitrary string
+    #indicating the region.This is normally specified as a -D option (eg) -Deureka.region=us-east-1
+    region: default
+
+
+    #For eureka clients running in eureka server, it needs to connect to servers in other zones
+    preferSameZone: false
+
+    #Change this if you want to use a DNS based lookup for determining other eureka servers. For example
+    #of specifying the DNS entries, check the eureka-client-test.properties, eureka-client-prod.properties
+    #shouldUseDns: false
+
+    us-east-1:
+      availabilityZones: default
+
+  instance:
+    #Virtual host name by which the clients identifies this service
+    virtualHostName: ${spring.application.name}
+```
 
 ## Appendix
+
+File tree
+
+```
+├── ./README.md
+├── ./dashboard
+│   ├── ./dashboard/pom.xml
+│   └── ./dashboard/src
+│       └── ./dashboard/src/main
+│           ├── ./dashboard/src/main/java
+│           │   └── ./dashboard/src/main/java/demo
+│           │       ├── ./dashboard/src/main/java/demo/DashboardApplication.java
+│           │       └── ./dashboard/src/main/java/demo/RestApi.java
+│           └── ./dashboard/src/main/resources
+│               ├── ./dashboard/src/main/resources/application.yml
+│               ├── ./dashboard/src/main/resources/banner.txt
+│               ├── ./dashboard/src/main/resources/favicon.ico
+│               └── ./dashboard/src/main/resources/static
+│                   ├── ./dashboard/src/main/resources/static/css
+│                   │   ├── ./dashboard/src/main/resources/static/css/bootstrap-3.2.0.css
+│                   │   ├── ./dashboard/src/main/resources/static/css/dashboard.css
+│                   │   ├── ./dashboard/src/main/resources/static/css/font-awesome-animation.css
+│                   │   ├── ./dashboard/src/main/resources/static/css/leaflet.control.sidebar.css
+│                   │   ├── ./dashboard/src/main/resources/static/css/login.css
+│                   │   ├── ./dashboard/src/main/resources/static/css/visualsearch-datauri.css
+│                   │   └── ./dashboard/src/main/resources/static/css/visualsearch.css
+│                   ├── ./dashboard/src/main/resources/static/images
+│                   ├── ./dashboard/src/main/resources/static/index.html
+│                   └── ./dashboard/src/main/resources/static/js
+│                       ├── ./dashboard/src/main/resources/static/js/bootstrap-3.2.0.js
+│                       ├── ./dashboard/src/main/resources/static/js/dashboard.js
+│                       ├── ./dashboard/src/main/resources/static/js/leaflet.control.sidebar.js
+│                       ├── ./dashboard/src/main/resources/static/js/leaflet.easybutton.js
+│                       ├── ./dashboard/src/main/resources/static/js/leaflet.groupedlayercontrol.js
+│                       ├── ./dashboard/src/main/resources/static/js/leaflet.markercluster.js
+│                       ├── ./dashboard/src/main/resources/static/js/pages.js
+│                       ├── ./dashboard/src/main/resources/static/js/sockjs.js
+│                       ├── ./dashboard/src/main/resources/static/js/stomp.js
+│                       ├── ./dashboard/src/main/resources/static/js/visualsearch.js
+│                       └── ./dashboard/src/main/resources/static/js/vs-dependencies.js
+├── ./docker-compose.yml
+├── ./fleet-location-ingest
+│   ├── ./fleet-location-ingest/README.md
+│   ├── ./fleet-location-ingest/pom.xml
+│   └── ./fleet-location-ingest/src
+│       ├── ./fleet-location-ingest/src/main
+│       │   ├── ./fleet-location-ingest/src/main/java
+│       │   │   └── ./fleet-location-ingest/src/main/java/demo
+│       │   │       ├── ./fleet-location-ingest/src/main/java/demo/FleetLocationIngestApplication.java
+│       │   │       └── ./fleet-location-ingest/src/main/java/demo/VehiclePositionsSource.java
+│       │   └── ./fleet-location-ingest/src/main/resources
+│       │       ├── ./fleet-location-ingest/src/main/resources/application.yml
+│       │       └── ./fleet-location-ingest/src/main/resources/public
+│       │           └── ./fleet-location-ingest/src/main/resources/public/index.html
+│       └── ./fleet-location-ingest/src/test
+│           └── ./fleet-location-ingest/src/test/resources
+│               ├── ./fleet-location-ingest/src/test/resources/locations.json
+│               └── ./fleet-location-ingest/src/test/resources/test-route-1.kml
+├── ./fleet-location-service
+│   ├── ./fleet-location-service/fleet.json
+│   ├── ./fleet-location-service/pom.xml
+│   ├── ./fleet-location-service/src
+│   │   ├── ./fleet-location-service/src/main
+│   │   │   ├── ./fleet-location-service/src/main/java
+│   │   │   │   └── ./fleet-location-service/src/main/java/demo
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/FaultCode.java
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/FleetBulkUploadController.java
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/FleetLocationServiceApplication.java
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/Location.java
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/LocationRepository.java
+│   │   │   │       ├── ./fleet-location-service/src/main/java/demo/UnitFault.java
+│   │   │   │       └── ./fleet-location-service/src/main/java/demo/UnitInfo.java
+│   │   │   └── ./fleet-location-service/src/main/resources
+│   │   │       └── ./fleet-location-service/src/main/resources/application.yml
+│   │   └── ./fleet-location-service/src/test
+│   │       └── ./fleet-location-service/src/test/resources
+│   │           ├── ./fleet-location-service/src/test/resources/companies.txt
+│   │           └── ./fleet-location-service/src/test/resources/fleet.json
+│   └── ./fleet-location-service/upload-fleet.sh
+├── ./fleet-location-simulator
+│   ├── ./fleet-location-simulator/pom.xml
+│   └── ./fleet-location-simulator/src
+│       ├── ./fleet-location-simulator/src/main
+│       │   ├── ./fleet-location-simulator/src/main/java
+│       │   │   └── ./fleet-location-simulator/src/main/java/demo
+│       │   │       ├── ./fleet-location-simulator/src/main/java/demo/GpsSimulatorApplication.java
+│       │   │       ├── ./fleet-location-simulator/src/main/java/demo/model
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/CurrentPosition.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/DirectionInput.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/FaultCode.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/GpsSimulatorRequest.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/Leg.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/Point.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/PositionInfo.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/ServiceLocation.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/model/SimulatorFixture.java
+│       │   │       │   └── ./fleet-location-simulator/src/main/java/demo/model/VehicleStatus.java
+│       │   │       ├── ./fleet-location-simulator/src/main/java/demo/rest
+│       │   │       │   └── ./fleet-location-simulator/src/main/java/demo/rest/LocationSimulatorRestApi.java
+│       │   │       ├── ./fleet-location-simulator/src/main/java/demo/service
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/service/GpsSimulatorFactory.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/service/PathService.java
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/service/PositionService.java
+│       │   │       │   └── ./fleet-location-simulator/src/main/java/demo/service/impl
+│       │   │       │       ├── ./fleet-location-simulator/src/main/java/demo/service/impl/DefaultGpsSimulatorFactory.java
+│       │   │       │       ├── ./fleet-location-simulator/src/main/java/demo/service/impl/DefaultPathService.java
+│       │   │       │       └── ./fleet-location-simulator/src/main/java/demo/service/impl/DefaultPositionService.java
+│       │   │       ├── ./fleet-location-simulator/src/main/java/demo/support
+│       │   │       │   ├── ./fleet-location-simulator/src/main/java/demo/support/FaultCodeUtils.java
+│       │   │       │   └── ./fleet-location-simulator/src/main/java/demo/support/NavUtils.java
+│       │   │       └── ./fleet-location-simulator/src/main/java/demo/task
+│       │   │           ├── ./fleet-location-simulator/src/main/java/demo/task/GpsSimulator.java
+│       │   │           └── ./fleet-location-simulator/src/main/java/demo/task/GpsSimulatorInstance.java
+│       │   └── ./fleet-location-simulator/src/main/resources
+│       │       ├── ./fleet-location-simulator/src/main/resources/application.yml
+│       │       ├── ./fleet-location-simulator/src/main/resources/directions.json
+│       │       ├── ./fleet-location-simulator/src/main/resources/fixture.json
+│       │       └── ./fleet-location-simulator/src/main/resources/public
+│       │           └── ./fleet-location-simulator/src/main/resources/public/index.html
+│       └── ./fleet-location-simulator/src/test
+│           └── ./fleet-location-simulator/src/test/resources
+│               ├── ./fleet-location-simulator/src/test/resources/locations.json
+│               └── ./fleet-location-simulator/src/test/resources/test-route-1.kml
+├── ./fleet-location-updater
+│   ├── ./fleet-location-updater/pom.xml
+│   └── ./fleet-location-updater/src
+│       ├── ./fleet-location-updater/src/main
+│       │   ├── ./fleet-location-updater/src/main/java
+│       │   │   └── ./fleet-location-updater/src/main/java/demo
+│       │   │       ├── ./fleet-location-updater/src/main/java/demo/FleetLocationUpdaterApplication.java
+│       │   │       ├── ./fleet-location-updater/src/main/java/demo/FleetLocationUpdaterSink.java
+│       │   │       ├── ./fleet-location-updater/src/main/java/demo/WebSocketConfig.java
+│       │   │       ├── ./fleet-location-updater/src/main/java/demo/model
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/model/CurrentPosition.java
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/model/FaultCode.java
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/model/Point.java
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/model/ServiceLocation.java
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/model/VehicleStatus.java
+│       │   │       │   └── ./fleet-location-updater/src/main/java/demo/model/package-info.java
+│       │   │       ├── ./fleet-location-updater/src/main/java/demo/service
+│       │   │       │   ├── ./fleet-location-updater/src/main/java/demo/service/ServiceLocationService.java
+│       │   │       │   └── ./fleet-location-updater/src/main/java/demo/service/impl
+│       │   │       │       └── ./fleet-location-updater/src/main/java/demo/service/impl/DefaultServiceLocationService.java
+│       │   │       └── ./fleet-location-updater/src/main/java/demo/web
+│       │   │           ├── ./fleet-location-updater/src/main/java/demo/web/WebSocketApi.java
+│       │   │           └── ./fleet-location-updater/src/main/java/demo/web/package-info.java
+│       │   └── ./fleet-location-updater/src/main/resources
+│       │       ├── ./fleet-location-updater/src/main/resources/application.yml
+│       │       └── ./fleet-location-updater/src/main/resources/public
+│       │           ├── ./fleet-location-updater/src/main/resources/public/index.html
+│       │           └── ./fleet-location-updater/src/main/resources/public/stomp.js
+│       └── ./fleet-location-updater/src/test
+│           └── ./fleet-location-updater/src/test/resources
+│               └── ./fleet-location-updater/src/test/resources/service-location.json
+├── ./mvnw
+├── ./platform
+│   ├── ./platform/eureka
+│   │   ├── ./platform/eureka/pom.xml
+│   │   └── ./platform/eureka/src
+│   │       └── ./platform/eureka/src/main
+│   │           ├── ./platform/eureka/src/main/docker
+│   │           │   └── ./platform/eureka/src/main/docker/Dockerfile
+│   │           ├── ./platform/eureka/src/main/java
+│   │           │   └── ./platform/eureka/src/main/java/eurekademo
+│   │           │       └── ./platform/eureka/src/main/java/eurekademo/EurekaApplication.java
+│   │           └── ./platform/eureka/src/main/resources
+│   │               ├── ./platform/eureka/src/main/resources/application.yml
+│   │               └── ./platform/eureka/src/main/resources/bootstrap.yml
+│   ├── ./platform/hystrix-dashboard
+│   │   ├── ./platform/hystrix-dashboard/pom.xml
+│   │   └── ./platform/hystrix-dashboard/src
+│   │       └── ./platform/hystrix-dashboard/src/main
+│   │           ├── ./platform/hystrix-dashboard/src/main/java
+│   │           │   └── ./platform/hystrix-dashboard/src/main/java/hystrixdashboard
+│   │           │       └── ./platform/hystrix-dashboard/src/main/java/hystrixdashboard/HystrixDashboardApplication.java
+│   │           └── ./platform/hystrix-dashboard/src/main/resources
+│   │               ├── ./platform/hystrix-dashboard/src/main/resources/application.yml
+│   │               └── ./platform/hystrix-dashboard/src/main/resources/bootstrap.yml
+│   └── ./platform/pom.xml
+├── ./pom.xml
+├── ./service-dispatch-model
+│   ├── ./service-dispatch-model/pom.xml
+│   └── ./service-dispatch-model/src
+│       ├── ./service-dispatch-model/src/main
+│       │   ├── ./service-dispatch-model/src/main/java
+│       │   │   └── ./service-dispatch-model/src/main/java/com
+│       │   │       └── ./service-dispatch-model/src/main/java/com/taxi
+│       │   │           └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/DispatchSimulatorApplication.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/OrderController.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/OrderRepository.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/algo
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/algo/NearestDispatch.java
+│       │   │               │   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/algo/OptimalDispatch.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/bussiness
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/bussiness/CheckDriverStatus.java
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/bussiness/StartDispatch.java
+│       │   │               │   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/bussiness/StartOptimalDispatch.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/geo
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/geo/GeoDistance.java
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/geo/GeoHashUtils.java
+│       │   │               │   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/geo/GeoPoint.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/map
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/map/DriveMove.java
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/map/DriverInit.java
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/map/DriverMap.java
+│       │   │               │   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/map/MapSettings.java
+│       │   │               ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/object
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/object/Driver.java
+│       │   │               │   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/object/Order.java
+│       │   │               │   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/object/User.java
+│       │   │               └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils
+│       │   │                   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/CreateOrder.java
+│       │   │                   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/DriverBusy.java
+│       │   │                   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/ReadAcceptTable.java
+│       │   │                   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/ReadDriverID.java
+│       │   │                   ├── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/ReadUserRequest.java
+│       │   │                   └── ./service-dispatch-model/src/main/java/com/taxi/Service-Dispatch-Model/utils/WriteToCSV.java
+│       │   ├── ./service-dispatch-model/src/main/main.iml
+│       │   └── ./service-dispatch-model/src/main/resources
+│       │       ├── ./service-dispatch-model/src/main/resources/application.properties
+│       │       ├── ./service-dispatch-model/src/main/resources/static
+│       │       └── ./service-dispatch-model/src/main/resources/templates
+│       └── ./service-dispatch-model/src/test
+│           ├── ./service-dispatch-model/src/test/java
+│           │   └── ./service-dispatch-model/src/test/java/com
+│           │       └── ./service-dispatch-model/src/test/java/com/taxi
+│           │           └── ./service-dispatch-model/src/test/java/com/taxi/DispatchSimulator
+│           │               ├── ./service-dispatch-model/src/test/java/com/taxi/DispatchSimulator/DispatchSimulatorApplicationTests.java
+│           │               └── ./service-dispatch-model/src/test/java/com/taxi/DispatchSimulator/Main.java
+│           └── ./service-dispatch-model/src/test/test.iml
+├── ./service-location-service
+│   ├── ./service-location-service/pom.xml
+│   ├── ./service-location-service/serviceLocations.json
+│   ├── ./service-location-service/src
+│   │   ├── ./service-location-service/src/main
+│   │   │   ├── ./service-location-service/src/main/java
+│   │   │   │   └── ./service-location-service/src/main/java/demo
+│   │   │   │       ├── ./service-location-service/src/main/java/demo/ServiceLocation.java
+│   │   │   │       ├── ./service-location-service/src/main/java/demo/ServiceLocationBulkUploadController.java
+│   │   │   │       ├── ./service-location-service/src/main/java/demo/ServiceLocationRepository.java
+│   │   │   │       └── ./service-location-service/src/main/java/demo/ServiceLocationServiceApplication.java
+│   │   │   └── ./service-location-service/src/main/resources
+│   │   │       └── ./service-location-service/src/main/resources/application.yml
+│   │   └── ./service-location-service/src/test
+│   │       └── ./service-location-service/src/test/resources
+│   │           └── ./service-location-service/src/test/resources/locations.json
+│   └── ./service-location-service/upload-serviceLocations.sh
+├── ./start-dashboard.sh
+├── ./start-eureka.sh
+├── ./start-hystrix.sh
+├── ./start-location-ingest.sh
+├── ./start-location-service.sh
+├── ./start-location-simulator.sh
+├── ./start-location-updater.sh
+└── ./start-service-location-service.sh
+```
+
+```
+##Service Start Sequence
+1. docker-compose up
+3. sh ./start-location-simulator.sh
+4. sh ./start-location-ingest.sh
+5. sh ./start-location-updater.sh
+6. sh ./start-fleet-location-service.sh
+7. go to fleet location service folder and run sh ./upload-fleet.sh
+8. sh ./start-dashboard.sh
+
+##UI
+1. Open Dashboard UI on http://localhost:8080
+2. Open Simulator UI on http://localhost:9005
+3. Click run simulation
+```
 
 
 
