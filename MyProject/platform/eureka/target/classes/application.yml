@@ -1,0 +1,18 @@
+server:
+  port: 8761
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+
+---
+spring:
+  profiles: cloud
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
