@@ -9,9 +9,9 @@
 	<description>Spring Uber Project Demo</description>
 
 	<parent>
-	<groupId>org.demo</groupId>
-	<artifactId>spring-cloud-uber-vehicle-fleet</artifactId>
-	<version>1.0.0.BUILD-SNAPSHOT</version>
+		<groupId>org.demo</groupId>
+		<artifactId>spring-taxi-dispatch-simulator</artifactId>
+		<version>1.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
