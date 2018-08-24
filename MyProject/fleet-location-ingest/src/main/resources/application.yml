@@ -1,0 +1,9 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: fleet-location-ingest
+  cloud:
+    stream:
+      bindings:
+        output: vehicles
