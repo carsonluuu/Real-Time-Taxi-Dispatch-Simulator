@@ -1,0 +1,181 @@
+{
+  "numberOfGpsSimulatorRequests": 8,
+  "gpsSimulatorRequests": [
+    {
+      "vin": "7c08973d-bed4-4cbd-9c28-9282a02a6032",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 0,
+      "vehicleStatus": "SERVICE_SOON",
+      "polyline": "}_ulFvq|tM@wLtOCnG@RHhArAzDvEZZTN|DjAz@Tv@Xp@f@j@j@b@j@vAhBhB~Bh@x@Zp@b@jAdCfIjDlLrClJVt@z@hBjBhEv@~A^l@|@hAtAlA|CdCdBtA|AnAVZTh@Jd@d@nGRhDNvBbD?hG?nJ?zC@`GApI?XLdC@zEBb@?Nh@`BxGx@`Dx@pDzB~IhBhHjCrK`CxJ|AnGdC|JfAhEhCtKn@`CtAzF~@jD@ZGd@Q`@Ij@Ch@Dj@L^XZZLZFJ@VCRGHGJKPIPQV?tAn@NDrFlCfCnA\\VNLBL@`@JRFFH@PDLLLVLPPLRBNAPETKp@c@XMBCLEh@AdAANIhBCvB@dBFl@?lA?JGzBA~EAvC?xB~InBAlA?",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "FMW",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceInfo",
+        "description": "Firmware Upgrade Required",
+        "repairInstructions": "Verify Software update has been completed if available for this engine.",
+        "fmi": "14",
+        "sa": null,
+        "spn": "171"
+      }
+    },
+    {
+      "vin": "7ca3ec62-6a22-4291-af95-d2a7d795ca7c",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 45,
+      "vehicleStatus": "NONE",
+      "polyline": "mfmlFxpbuMAlECl@[vA{BzIqBfIgAjES`@U`AmErQ}AbGk@dCQt@Kv@U~@CJ[n@]n@QXA?WVM^AXBt@OrBg@nBeGrV]rAUn@Wv@[P[D[HYPSZM`@Eb@@`@D`@Vh@DT?d@G\\MbAcA`EoEtQU|@m@hCUh@Mb@GLIJIDUFQLOVG^Db@JXTT^CRIPSH_@?KvB?^?P^V`@L^Pt@Nx@Dt@@fADlOHbYFjPJvMF|BSH}@\\kElBsClAg@VHtIBnGJjJDdI?lIIxIvBFBBJBJEDOCOIIM@GJA@_@@",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "OHT",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceSoon",
+        "description": "Overheating Warning",
+        "repairInstructions": "Cool it down with some ice from freezer",
+        "fmi": "15",
+        "sa": null,
+        "spn": "3719"
+      }
+    },
+    {
+      "vin": "b594f86b-9e33-4f51-8caa-7e31bb205178",
+      "speedInKph": 40,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 60,
+      "vehicleStatus": "NONE",
+      "polyline": "mrhlFpa}tM@xD?x@m@zDmAlGkArGg@nCQjAa@~BGvAEf@a@bDIjBBrAGhJEbCQpB[fBw@dFSlAQl@aBjJYlBI|@Gr@CpB?|@A`AAdWAdRArBEzAEdB?vAKXKpAAjDArBIfJ@rB?J@HDX@\\NlC@ZJvABz@AlBOfB_@`CK^MJa@zA[`Ao@`BO\\}AnD_@p@a@f@[`@g@h@aAv@kAt@oAh@sA`@g@Te@Xg@`@m@x@Uf@Wr@Mp@m@jEKl@Oh@Ef@QfAYfCG~A@xAJtAVtA`@rA|@fC^nAVbBLjBA~Dm@`d@IlAIt@c@bBm@lAc@v@SPg@\\mB`Aa@Je@F[@e@Cc@Ga@M}As@g@[g@Mc@C[FYRQ\\gA~DsAdCMb@Mv@MrAOb@[XsIpEe@Xm@Tk@J_@BeK?uAQwAIgAI]@W@]@e@FeARaDv@sBj@wBf@c@Dg@?gAKgD_AoA[}CYy@OcAg@yCqBkAk@iG}B{By@}@_@gAy@aAeAe@w@Qa@WcAGe@Co@DsBDiACq@Kw@Og@k@aAc@Ue@My@@_@Fg@VgAdAoDjDuA~AoAfBe@t@S`@Sh@Mb@e@~@e@n@g@f@o@b@u@l@g@r@O`@Y`Aa@pAuAxB}CxE_@\\e@Hs@C[GUM{@s@QOCFoAlBcDzE_PfVc@h@a@NOLk@Tq@Js@Lu@Ts@Xm@\\{@r@s@v@i@v@e@~@e@lA[rAUtAO`BB`ACRKn@Qp@Sf@kCbEWIoC?@nFR[zA}BhDkF\\o@Ri@No@Hm@BYLaABa@",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "OHT",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceSoon",
+        "description": "Overheating Warning",
+        "repairInstructions": "Cool it down with some ice from freezer",
+        "fmi": "15",
+        "sa": null,
+        "spn": "3719"
+      }
+    },
+    {
+      "vin": "ba6d29ab-f137-47df-832a-0ba6270cb49f",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 60,
+      "vehicleStatus": "SERVICE_SOON",
+      "polyline": "{fllFfsduMxMA?wK@mHJ}AbCkML}@\\{A^oBrBoLdAuFdEkU`@oBj@{CLiAd@sCAg@e@yBEc@AiB@mHCs@EM_@q@kC_EsB}C{EoHm@aAq@aAE@KBK@iD?iD?c@Gm@?m@A}F??mJdGvA",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "LTP",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceInfo",
+        "description": "Low Tire Pressure Warning",
+        "repairInstructions": "Re-inflate tires as soon as possible",
+        "fmi": "14",
+        "sa": null,
+        "spn": "3696"
+      }
+    },
+    {
+      "vin": "4c3476fb-c60e-4970-8c3d-cb788c49f766",
+      "speedInKph": 35,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 0,
+      "vehicleStatus": "NONE",
+      "polyline": "gaulF~shuM`AWZG~@BVJjAbAXHt@Fn@NRHb@T^^PDI{BI_AMoC?w@BYH[D[d@g@h@k@HIpAmAR_@Zs@^q@`@i@nAqAr@_AR_@nAwDrAsELWrAqApAcATU^e@Pc@HUJk@DONU`BgAbBaAf@Ml@AV@`CXfAJVAVG^UVW^wAj@mCv@{BJ]FWDs@@}IC_CC]YuBOeACk@HcAd@_@ZELI~DoAxBuHZcAb@A|C?f@AzF@bFBfEApJAbEBvE?nADtB?fFEfJ@|GD|ICzF@jG?`J@|A?dAFpC?h@Lz@@pCARHTLf@l@D@`@k@DOB]A[ESF_@Dm@RsABKT_AXs@Ry@l@wBvAiGpD{Nf@}BH]Fg@pC_Lf@sB|@kD",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "MJR",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceSoon",
+        "description": "Engine Failure",
+        "repairInstructions": "Tow or haul to nearest service station for replacement",
+        "fmi": "31",
+        "sa": null,
+        "spn": "3719"
+      }
+    },
+    {
+      "vin": "ccbb4295-c88b-4e3d-9b5a-07b204b9c7d9",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 60,
+      "vehicleStatus": "NONE",
+      "polyline": "ikilFrlttMiAvNAxS?lE~ChBlCdBpAx@xRbMn@b@Z\\^h@P^xApDnAvCpHpRtDhJxApDr@fBAr@Q|D@TBLPVGLoBzF}AlEu@nCUz@iAfDw@pBGLoH|QMXS^]b@_@X]No@Da@BYF[R_@j@On@Ar@Fh@Xn@^Zh@Zr@`@`@`@b@l@b@nAR`A^`CL|@HLFpBFnFAlBS~HUtG]vEU~A}@|CkAtD[zA_@|CkArOEfAuArI}@|EcAhFgAnGYbBWvBSjDGhJEbCQpB[fBw@dFSlAQl@aBjJYlBI|@Gr@CpB?|@A`AAdWAdRArBEzAEdB?vAKXKpACpEG~IAtAMjAKd@U`@QL[Dg@AcGAoAA}@Bk@Di@Jc@Re@RiCfBm@\\u@HqI@mQCYT{D?uJEoMM_EBoGAeFC{E@wBBmB@QAc@@oA@?sEIuAH]|@kD",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "LOP",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "StopTruck",
+        "description": "Low oil pressure warning",
+        "repairInstructions": "Refill oil and check for leaks",
+        "fmi": "7",
+        "sa": null,
+        "spn": "4334"
+      }
+    },
+    {
+      "vin": "15dbf5c3-c0c9-4c59-8469-c2f2f0d6b7e4",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 60,
+      "vehicleStatus": "NONE",
+      "polyline": "kwhlFxfhuMvA{BvAsBzCuDnBqBhDaDpGuFfC}BrDuD`DcEV_@Zg@vDyFb@o@`@GNCT?RHRPLb@?PEXMTGDUFWGQQMOg@[][[[sBwBeD_DoBiBoCqCoFeFsFgFwAuAuAoAa@u@o@sAWw@Oo@SiBEgB?iDEkBSqBQu@]iAa@_As@kA_AuAqBwCs@eA?O?GAKYq@a@uAcA}FUw@Sg@c@o@k@e@_@S[Mi@K[Cq@BwBB{EAqA?w@FoAVg@RSJORiCfB_@T_@Jc@D_D?cG@kD?oICYT{D?uJE{EGsFE_EBkHAiEC{E@eFDQAc@@oA@?sEIuAH]|@kD",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "FMW",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceInfo",
+        "description": "Firmware Upgrade Required",
+        "repairInstructions": "Verify Software update has been completed if available for this engine.",
+        "fmi": "14",
+        "sa": null,
+        "spn": "171"
+      }
+    },
+    {
+      "vin": "9d22189b-9c7f-4ad8-b4f9-49aa178000c6",
+      "speedInKph": 50,
+      "move": true,
+      "exportPositionsToKml": true,
+      "exportPositionsToMessaging": true,
+      "reportInterval": 1000,
+      "secondsToError": 0,
+      "vehicleStatus": "NONE",
+      "polyline": "sablFx~`uM~@iHd@yAdAoBAwCA{E?iGCiE@uAKi@?O?iA?KAeAFSLa@V_@TQPGT?XHVPNXD\\AZMZWX]Js@N_@A_AAwA@oME}IEkAEsAO}@SmA_@{BaAoFkCoBy@k@YoBs@wJaDyGqBuA[iCg@wE{@w@Qu@WeAi@}@k@e@]w@{@a@e@aA{Am@mAa@gAa@oAo@mD]aCaAiIU{B_AeH[aBk@mBw@uB}@{AgAwAo@u@y@s@aBuAUAWKoBkAmBuA_Ay@yA}Aa@i@aCoDi@k@eA_@_AGo@HYH]Pq@d@y@f@}I`H{@j@k@V_@Ps@P}@TeA@aC@{@E_@CiBQkCM{@@o@Fy@`@g@j@e@dAUhAe@nCcA~Gs@dGq@zEQr@[tBeAjGKh@aBvIoAbHe@bDWjCCr@CbBC`CCdEEhBQpBw@xEi@hDId@M^{@bF[|AUpAQxAM|ACtCAvAA|]CtNCjAGhBAf@@jAITCLEd@EdDAfAAfDGdGI`AIj@Sh@OPUH_@@qGCSAyCDi@Fg@Pc@PSJwBzAa@T]Ra@Fk@@uG@cD?eD?gHCYT_IAsQMmBCwA@}F@cIEaCBwE@oC?yBB?sEIuAh@yB\\oA",
+      "faultCode": {
+        "engineMake": "DET",
+        "faultCode": "FMW",
+        "faultCodeId": "DET",
+        "faultCodeClassification": "ServiceInfo",
+        "description": "Firmware Upgrade Required",
+        "repairInstructions": "Verify Software update has been completed if available for this engine.",
+        "fmi": "14",
+        "sa": null,
+        "spn": "171"
+      }
+    }
+  ]
+}
