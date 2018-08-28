@@ -1,0 +1,20 @@
+server:
+  port: 9007
+spring:
+  application:
+    name: fleet-location-updater
+  cloud:
+    stream:
+      bindings:
+        input: vehicles
+
+---
+spring:
+  profiles: test
+#ribbon:
+#  eureka:
+#    enabled: false
+#service-location-service:
+#  ribbon:
+#    listOfServers: localhost:9001
+#hystrix.command.default.execution.isolation.strategy: SEMAPHORE

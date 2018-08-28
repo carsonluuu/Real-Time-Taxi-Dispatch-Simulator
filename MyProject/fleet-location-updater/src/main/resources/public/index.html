@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Service Location Simulator</title>
+
+	<!-- Bootstrap -->
+	<link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+	<style type="text/css">
+		.control-buttons a {
+			margin-bottom: 1em;
+		}
+	</style>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="container">
+		<h1>Service Location Updater</h1>
+		<div class="row">
+			<div class="col-xs-12 control-buttons">
+				<a class="btn btn-default" onclick="subscribe();">Subscribe to Location Updates</a>
+				<a class="btn btn-default" onclick="unsubscribe();">UnSubscribe to Location Updates</a>
+			</div>
+		</div>
+		<div class="row" style="margin-bottom: 1em;">
+			<div class="col-xs-12">
+				<p>Please connect to queue <code>/queue/vehicles</code> to receive vehicle position updates.</p>
+			</div>
+		</div>
+		<div class="row" style="margin-bottom: 1em;">
+			<div class="col-xs-12">
+				<button id="sendMessage" class="btn btn-default" style="margin-bottom: 1em;" onclick="sendMessage();">Send Test Message</button>
+				<textarea id="messageContents" class="form-control" rows="5">
+{
+  "vin": "4c3476fb-c60e-4970-8c3d-cb788c49f766",
+  "point": {
+    "latitude": 38.94286343501579,
+    "longitude": -76.99099467966852
+  },
+  "vehicleStatus": "NORMAL",
+  "speed": 13.8,
+  "heading": 236,
+}
+				</textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<pre id="response">Unsubscribed</pre>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+
+			</div>
+		</div>
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+	<script src="stomp.js"></script>
+	<script type="text/javascript">
+		var responseDiv = document.getElementById('response');
+
+		Stomp.WebSocketClass = SockJS;
+		var url = window.location.protocol + '//' + window.location.host + '/stomp';
+		var queueName = '/queue/vehicles';
+		var ws = new SockJS(url);
+		var client = Stomp.over(ws);
+
+		client.heartbeat.outgoing = 0;
+		client.heartbeat.incoming = 0;
+		client.debug = function() {};  //turn off debugging
+
+		var on_connect = function(d) {
+			responseDiv.innerHTML = responseDiv.innerHTML + '\nConnected to ' + url + '\n';
+		};
+		var on_error =  function(e) {
+			console.log('error: ' + e);
+		};
+
+		client.connect("guest", "guest", on_connect, on_error, '/');
+
+		function sendMessage() {
+			var message = document.getElementById('messageContents').value;
+			client.send("/app/sendMessage", {}, message);
+			responseDiv.innerHTML = responseDiv.innerHTML + 'sendMessage triggered\n'
+		}
+
+		var subscription;
+		function subscribe() {
+			subscription = client.subscribe(queueName, function(d) {
+				responseDiv.innerHTML = responseDiv.innerHTML + d.body + '\n';
+			});
+			responseDiv.innerHTML = responseDiv.innerHTML + 'Subscribed to ' + queueName + '\n';
+			console.log(subscription);
+		}
+		function unsubscribe() {
+			subscription.unsubscribe();
+			responseDiv.innerHTML = responseDiv.innerHTML + 'Unsubscribed from ' + queueName + '\n';
+		}
+	</script>
+</body>
+</html>
