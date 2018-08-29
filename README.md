@@ -1,6 +1,6 @@
 # Spring Taxi Dispatch Simulator
 
-_This was the Intern project finished in Summer 2018 regarding a web service for the real-time taxi dispatch simulator. Many thanks to my supervisor and other senior engineers who gave me help with all efforts they got. Time goes fast all the time; wish them all good luck!_
+_This was the Intern project finished in Summer 2018 regarding a web service for real-time taxi dispatch simulator. Many thanks to my supervisor and other senior engineers who gave me help with all efforts they got. Time goes fast all the time; wish them all good luck!_
 
 \(_For confidential issues, the data used and presented are fake data generated randomly, but it does not effect the generosity of the project\)_
 
