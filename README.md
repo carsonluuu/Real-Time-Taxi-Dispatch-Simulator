@@ -16,7 +16,7 @@ For system design, there are two key part that are upper level services, which a
 
 * Drivers send the location info to dispatch service, returning with paired user info
 
-* User send request to dispatch service, returning with request![](/assets/introduction_overview.png)
+* User send requests to dispatch service, returning with request![](/assets/introduction_overview.png)
 
 Location table will be writing heavily while the Trip table will be reading heavily \(Drivers request queries\)
 
