@@ -775,6 +775,22 @@ eureka:
 
 ## Appendix
 
+Please generate the "fat" jar by yourself as following:
+
+Run
+```
+mvn clean install
+```
+by bash in the project folder to compile. If you don't have a maven, install one.
+
+Run
+```
+java -jar [jar-file-compiled by Maven]
+```
+The default place for the jar file is in the "./target" folder.
+
+OR you can import the project into IntelliJ(Suggested)
+
 ```
 ##Service Start Sequence
 1. docker-compose up
