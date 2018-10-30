@@ -65,7 +65,7 @@ NoSQL - Redis
 
 Cassandra: it is also slow, driver table is constantly updated and index key in Cassandra is not good for modified so often
 
-Memcached: there is no persistence storage \(No P\) and does not support Set \(it is troublesome\)
+Memcached: there is no persistence storage and does not support Set \(it is troublesome\)
 
 Mongo: It can be choosen
 
