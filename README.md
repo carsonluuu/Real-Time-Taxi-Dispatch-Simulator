@@ -5,7 +5,6 @@ _This was the Intern project finished in Summer 2018 regarding a web service for
 \(_For confidential issues, the data used and presented are fake data generated randomly, but it does not effect the generosity of the project at all\)_
 
 ---
-
 ## 1 Introduction
 
 Basically, the web application fulfills the dispatching simulating, order generation, driver monitoring, trajectory tacking, dashboard showcase, and etc.
