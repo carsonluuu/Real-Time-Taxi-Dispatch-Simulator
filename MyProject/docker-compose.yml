@@ -1,9 +1,127 @@
-rabbitmq:
-  image: rabbitmq:3-management
-  ports:
-    - "5672:5672"
-    - "15672:15672"
-mongodb:
-  image: mongo
-  ports:
-    - "27017:27017"
+version: "3.9"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+  eureka-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=platform/eureka/target/fleet-eureka-server-0.0.1-SNAPSHOT.jar
+    image: tds/fleet-eureka-server-docker
+    container_name: eureka
+    ports:
+      - "8761:8761"
+  hystrix-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=platform/hystrix-dashboard/target/fleet-hystrix-dashboard-0.0.1.BUILD-SNAPSHOT.jar
+    image: tds/fleet-hystrix-dashboard-docker
+    container_name: hystrix
+    ports:
+      - "7979:7979"
+  fleet-location-simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=fleet-location-simulator/target/fleet-location-simulator-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/fleet-location-simulator-docker
+    container_name: fleet-location-simulator
+    ports:
+      - "9005:9005"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+      - spring.rabbitmq.host=rabbitmq
+      - spring.data.mongodb.host=mongodb
+      - com.ross.fleet.location.ingest=http://fleet-location-ingest:9006/
+      - fleet-location-ingest.ribbon.listOfServers=fleet-location-ingest:9006
+      - gpsSimmulator.googleApiKey=AIzaSyDvdz2cb4zfp8NQVFu4kdzXFoIcHG744I4
+  fleet-location-ingest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=fleet-location-ingest/target/fleet-location-ingest-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/fleet-location-ingest-docker
+    container_name: fleet-location-ingest
+    ports:
+      - "9006:9006"
+    depends_on:
+      - fleet-location-simulator
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+      - spring.rabbitmq.host=rabbitmq
+      - spring.data.mongodb.host=mongodb
+  fleet-location-updater:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=fleet-location-updater/target/fleet-location-updater-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/fleet-location-updater-docker
+    container_name: fleet-location-updater
+    ports:
+      - "9007:9007"
+    depends_on:
+      - fleet-location-ingest
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+      - spring.data.mongodb.host=mongodb
+  service-location-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=service-location-service/target/service-location-service-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/service-location-service-docker
+    container_name: service-location-service
+    ports:
+      - "9001:9001"
+    depends_on:
+      - fleet-location-updater
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+      - spring.data.mongodb.host=mongodb
+  fleet-location-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=fleet-location-service/target/fleet-location-service-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/fleet-location-service-docker
+    container_name: fleet-location-service
+    ports:
+      - "9000:9000"
+    depends_on:
+      - service-location-service
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+      - spring.data.mongodb.host=mongodb
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=dashboard/target/dashboard-1.0.0.BUILD-SNAPSHOT.jar
+    image: tds/dashboard-docker
+    container_name: dashboard
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-location-service
+    environment:
+      - zuul.routes.fleet-location-service.url=http://fleet-location-service:9000
+      - zuul.routes.service-location-service.url=http://service-location-service:9001
+      - stomp.url=localhost:9007/stomp

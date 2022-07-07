@@ -21,7 +21,7 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
-    @GetMapping(path="/add")
+    @RequestMapping(method = RequestMethod.GET, path="/add")
     public @ResponseBody String addNewOrder () {
 
         /**
@@ -54,7 +54,7 @@ public class OrderController {
         return "Saved";
     }
 
-    @GetMapping(path="/all")
+    @RequestMapping(method = RequestMethod.GET, path="/all")
     public @ResponseBody Iterable<Order> getAllOrders() {
         // This returns a JSON or XML with the users
         return orderRepository.findAll();
